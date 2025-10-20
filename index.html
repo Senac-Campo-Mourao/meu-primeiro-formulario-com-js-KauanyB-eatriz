@@ -111,13 +111,19 @@
             const tel = document.getElementById('clientTel').value;
             const date = document.getElementById('clientDate').value;
             const sal = document.getElementById('clientSal').value;
+
+            let salNuumber = parseD(sal.replace(/[^\d,.-]/g, ''));
+            console.log(salNuumber);
+
+            const credit = salNuumber * 0.3;
             
             alert('Nome do cliente: ' + name + '\n' +
-            'CPF: ' + cpf + '\n' +
-            'Telefone: ' + tel + '\n'+
-            'Data de Nascimento: ' + date + '\n'+
-            'Salário: ' + sal
-        );
+                'CPF: ' + cpf + '\n' +
+                'Telefone: ' + tel + '\n'+
+                'Data de Nascimento: ' + date + '\n'+
+                'Salário: ' + sal + '\n'+
+                'Crédito disponível: R$ ' + credit.toFixed(2).replace('.', ',')
+            );
         });
     </script>
 
