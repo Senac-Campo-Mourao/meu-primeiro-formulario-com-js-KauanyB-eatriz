@@ -36,16 +36,16 @@
                                 <input type="text" id="clientCPF" class="form-control" placeholder="Digite o CPF do cliente">
                             </div>
                             <div class="mb-3">
-                                <label for="clientTel" class="form-label">Telefone:</label>
-                                <input type="tel" id="clientTel" class="form-control" placeholder="Digite o número de telefone do cliente">
+                                <label for="clientTelefone" class="form-label">Telefone:</label>
+                                <input type="tel" id="clientTelefone" class="form-control" placeholder="Digite o número de telefone do cliente">
                             </div>
                             <div class="mb-3">
-                                <label for="clientDate" class="form-label">Data de Nascimento:</label>
-                                <input type="date" id="clientDate" class="form-control">
+                                <label for="clientDateNasc" class="form-label">Data de Nascimento:</label>
+                                <input type="date" id="clientDateNasc" class="form-control">
                             </div>
                             <div class="mb-3">
-                                <label for="clientSal" class="form-label">Salário:</label>
-                                <input type="text" id="clientSal" class="form-control" placeholder="Digite o salário do cliente">
+                                <label for="clientSalary" class="form-label">Salário:</label>
+                                <input type="text" id="clientSalary" class="form-control" placeholder="Digite o salário do cliente">
                             </div>
                             <button type="submit" class="btn btn-primary">Salvar</button>
                         </form>
@@ -65,9 +65,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js" integrity="sha512-Rdk63VC+1UYzGSgd3u2iadi0joUrcwX0IWp2rTh6KXFoAmgOjRS99Vynz1lJPT8dLjvo6JZOqpAHJyfCEZ5KoA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
+        
         $('#clientCPF').mask('000.000.000-00');
-        $('#clientTel').mask('(00) 00000-0000');
-        $('#clientSal').maskMoney({ prefix: 'R$ ', allowNegative: false, thousands: '.', decimal: ',', affixesStay: false});
+        $('#clientTelefone').mask('(00) 00000-0000');
+        $('#clientSalary').maskMoney({ prefix: 'R$ ', allowNegative: false, thousands: '.', decimal: ',', affixesStay: false});
     
         function validateCPF(cpf) {
             if (!cpf) return false;
@@ -90,6 +91,7 @@
 
             return true;
         }
+        
         const cpfInput = document.getElementById('clientCPF');
         cpfInput.addEventListener('blur', function () {
             const value = cpfInput.value || '';
@@ -103,26 +105,35 @@
             }
         });
 
+        function DataCorret() {
+            const dateVal = document.getElementById('clientDateNasc').value;
+            if (!dateVal) return '';
+            const parts = dateVal.split('-');
+            if (parts.length !== 3) return dateVal;
+            return parts[2] + '/' + parts[1] + '/' + parts[0];
+        }
+
+        function CreditLimit(salary) {
+            const salaryCents = salary.replace(/[^\d,]/g, '').replace(',', '.');
+            let salaryConvertedReal = Math.round(parseFloat(salaryCents) * 100);
+            let salaryCreditLimit = (salaryConvertedReal * 0.3) /100;
+            return salaryCreditLimit.toFixed(2);
+        }
+
         document.getElementById('formCadastro').addEventListener('submit', function(event) {
             event.preventDefault();
-            
+
             const name = document.getElementById('clientName').value;
             const cpf = document.getElementById('clientCPF').value;
-            const tel = document.getElementById('clientTel').value;
-            const date = document.getElementById('clientDate').value;
-            const sal = document.getElementById('clientSal').value;
+            const telefone = document.getElementById('clientTelefone').value;
+            const salary = document.getElementById('clientSalary').value;
 
-            let salNuumber = parseD(sal.replace(/[^\d,.-]/g, ''));
-            console.log(salNuumber);
-
-            const credit = salNuumber * 0.3;
-            
-            alert('Nome do cliente: ' + name + '\n' +
-                'CPF: ' + cpf + '\n' +
-                'Telefone: ' + tel + '\n'+
-                'Data de Nascimento: ' + date + '\n'+
-                'Salário: ' + sal + '\n'+
-                'Crédito disponível: R$ ' + credit.toFixed(2).replace('.', ',')
+            alert('Nome do cliente: ' + name  +
+                '\nCPF: ' + cpf +
+                '\nTelefone: ' + telefone +
+                '\nData de Nascimento: ' + DataCorret() +
+                '\nSalário: R$' + salary +
+                '\nCrédito Disponível: R$' + CreditLimit(salary)
             );
         });
     </script>
