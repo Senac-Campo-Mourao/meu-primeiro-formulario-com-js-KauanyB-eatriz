@@ -9,7 +9,7 @@
     
     <title>Meu primeiro formulário</title>
     
-    <link rel="shortcut icon" href="forms.webp" type="image/x-icon">
+    <link rel="shortcut icon" href="img/forms.webp" type="image/x-icon">
 
 </head>
 <body>
@@ -48,6 +48,7 @@
                                 <input type="text" id="clientSalary" class="form-control" placeholder="Digite o salário do cliente">
                             </div>
                             <button type="submit" class="btn btn-primary">Salvar</button>
+                            <button type="button" class="btn btn-info text-white" onclick="mostrarCliente()">Mostrar Cliente</button>
                         </form>
                     
                     </div>                
@@ -65,78 +66,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js" integrity="sha512-Rdk63VC+1UYzGSgd3u2iadi0joUrcwX0IWp2rTh6KXFoAmgOjRS99Vynz1lJPT8dLjvo6JZOqpAHJyfCEZ5KoA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
-        
         $('#clientCPF').mask('000.000.000-00');
         $('#clientTelefone').mask('(00) 00000-0000');
-        $('#clientSalary').maskMoney({ prefix: 'R$ ', allowNegative: false, thousands: '.', decimal: ',', affixesStay: false});
-    
-        function validateCPF(cpf) {
-            if (!cpf) return false;
-            const onlyDigits = cpf.replace(/\D+/g, '');
-            if (onlyDigits.length !== 11) return false;
-            if (/^(\d)\1{10}$/.test(onlyDigits)) return false; 
-            const digits = onlyDigits.split('').map(d => parseInt(d, 10));
-
-            let sum = 0;
-            for (let i = 0; i < 9; i++) sum += digits[i] * (10 - i);
-            let rem = sum % 11;
-            let check1 = (rem < 2) ? 0 : 11 - rem;
-            if (check1 !== digits[9]) return false;
-
-            sum = 0;
-            for (let i = 0; i < 10; i++) sum += digits[i] * (11 - i);
-            rem = sum % 11;
-            let check2 = (rem < 2) ? 0 : 11 - rem;
-            if (check2 !== digits[10]) return false;
-
-            return true;
-        }
-        
-        const cpfInput = document.getElementById('clientCPF');
-        cpfInput.addEventListener('blur', function () {
-            const value = cpfInput.value || '';
-            const onlyDigits = value.replace(/\D+/g, '');
-            
-            if (onlyDigits.length === 0) return; 
-            if (!validateCPF(value)) {
-                alert('CPF inválido. Por favor, verifique e digite novamente.');
-                cpfInput.value = '';
-                cpfInput.focus();
-            }
-        });
-
-        function DataCorret() {
-            const dateVal = document.getElementById('clientDateNasc').value;
-            if (!dateVal) return '';
-            const parts = dateVal.split('-');
-            if (parts.length !== 3) return dateVal;
-            return parts[2] + '/' + parts[1] + '/' + parts[0];
-        }
-
-        function CreditLimit(salary) {
-            const salaryCents = salary.replace(/[^\d,]/g, '').replace(',', '.');
-            let salaryConvertedReal = Math.round(parseFloat(salaryCents) * 100);
-            let salaryCreditLimit = (salaryConvertedReal * 0.3) /100;
-            return salaryCreditLimit.toFixed(2);
-        }
-
-        document.getElementById('formCadastro').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const name = document.getElementById('clientName').value;
-            const cpf = document.getElementById('clientCPF').value;
-            const telefone = document.getElementById('clientTelefone').value;
-            const salary = document.getElementById('clientSalary').value;
-
-            alert('Nome do cliente: ' + name  +
-                '\nCPF: ' + cpf +
-                '\nTelefone: ' + telefone +
-                '\nData de Nascimento: ' + DataCorret() +
-                '\nSalário: R$' + salary +
-                '\nCrédito Disponível: R$' + CreditLimit(salary)
-            );
-        });
+        $('#clientSalary').maskMoney({ prefix: 'R$ ', allowNegative: false, thousands: '.', decimal: ',', affixesStay: false });
     </script>
+
+    <script src="script/script.js"></script>
 
 </body>
 </html>
