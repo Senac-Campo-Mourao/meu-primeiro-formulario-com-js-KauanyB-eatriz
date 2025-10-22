@@ -4,11 +4,8 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    
     <title>Meu primeiro formulário</title>
-    
     <link rel="shortcut icon" href="img/forms.webp" type="image/x-icon">
 
 </head>
@@ -17,9 +14,10 @@
     <div class="conteiner mt-5">
 
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 
                 <div class="card">                    
+                    
                     <div class="card-header bg-primary text-white">
                         <h1 class="mb-0">Cadastro</h1>
                     </div>
@@ -29,7 +27,7 @@
                         <form id="formCadastro">
                             <div class="mb-3">
                                 <label for="clientName" class="form-label">Nome do Cliente:</label>
-                                <input type="text" id="clientName" class="form-control" placeholder="Escreva o nome do cliente ">
+                                <input type="text" id="clientName" class="form-control" placeholder="Digite o nome do cliente ">
                             </div>
                             <div class="mb-3">
                                 <label for="clientCPF" class="form-label">CPF:</label>
@@ -37,7 +35,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="clientTelefone" class="form-label">Telefone:</label>
-                                <input type="tel" id="clientTelefone" class="form-control" placeholder="Digite o número de telefone do cliente">
+                                <input type="tel" id="clientTelefone" class="form-control" placeholder="Digite o telefone do cliente">
                             </div>
                             <div class="mb-3">
                                 <label for="clientDateNasc" class="form-label">Data de Nascimento:</label>
@@ -55,8 +53,40 @@
                 </div>
             
             </div>
+
+            <div class="col-md-8">
+                
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h2>Clientes Cadastrados</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>CPF</th>
+                                        <th>Telefone</th>
+                                        <th>Data de Nascimento</th>
+                                        <th>Salário</th>
+                                        <th>Crédito</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listaClients">
+                                    <tr>
+                                        <td colspan="7" class="text-center text-muted">Nenhum Cliente Cadastrado</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            
+            </div>
+        
         </div>
-    
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js" integrity="sha512-TPh2Oxlg1zp+kz3nFA0C5vVC6leG/6mm1z9+mA81MI5eaUVqasPLO8Cuk4gMF4gUfP5etR73rgU/8PNMsSesoQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

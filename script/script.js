@@ -72,6 +72,8 @@ function salveClient(client) {
     localStorage.setItem(`client_${index}_credit`, client.credit);
 
     localStorage.setItem('totalClients', index + 1);
+
+    listarClientes();
 }
 
 function clearStorage() {
@@ -82,19 +84,39 @@ function clearStorage() {
     document.getElementById('clientDateNasc').value = '';
 }
 
-function mostrarCliente() {
-    const name = localStorage.getItem('Name');
-    const cpf = localStorage.getItem('CPF');
-    const telefone = localStorage.getItem('Telefone');
-    const dateNasc = localStorage.getItem('DataNasc');
-    const salary = localStorage.getItem('Salary');
-    const credit = localStorage.getItem('Credit');
+function getClients() {
+    const clients = [];
+    const total = TotalyClients();
+
+    for (let i = 0; i < total; i++) {
+        const client = {
+            name: localStorage.getItem(`client_${i}_name`),
+            cpf: localStorage.getItem(`client_${i}_cpf`),
+            telefone: localStorage.getItem(`client_${i}_telefone`), 
+            dateNasc: localStorage.getItem(`client_${i}_dateNasc`),
+            salary: localStorage.getItem(`client_${i}_salary`),
+            credit: localStorage.getItem(`client_${i}_credit`),
+        };
+        clients.push(client);
+    }
+    return clients;
+};
+
+function listarClientes() {
+    const clients = getClients();
+    const tbody = document.getElementById('listaClients');
     
-    alert('Nome do cliente: ' + name +
-        '\nCPF: ' + cpf +  
-        '\nTelefone: ' + telefone +
-        '\nData de Nascimento: ' + dateNasc +
-        '\nSalário: R$' + salary +
-        '\nCrédito Disponível: R$' + credit
-    );
+    tbody.innerHTML = '';
+    clients.forEach(cli => { 
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${cli.name}</td>
+            <td>${cli.cpf}</td>
+            <td>${cli.telefone}</td>
+            <td>${cli.dateNasc}</td>
+            <td>${cli.salary}</td>
+            <td>${cli.credit}</td>
+        `;
+        tbody.appendChild(tr);
+    })
 }
