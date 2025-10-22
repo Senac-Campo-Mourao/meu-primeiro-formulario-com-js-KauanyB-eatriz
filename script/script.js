@@ -47,17 +47,32 @@ document.getElementById('formCadastro').addEventListener('submit', function (eve
     const dateNasc = document.getElementById('clientDateNasc').value;
     const salary = document.getElementById('clientSalary').value;
     const credit = CreditLimit(salary);
-
-    localStorage.setItem('Name', name);
-    localStorage.setItem('CPF', cpf);
-    localStorage.setItem('Telefone', telefone);
-    localStorage.setItem('DataNasc', dateNasc);
-    localStorage.setItem('Salary', salary);
-    localStorage.setItem('Credit', credit);
+    
+    const client = { 
+        name, cpf, telefone, dateNasc, salary, credit
+    };
+    salveClient(client);
 
     clearStorage();
     alert('Cliente cadastrado com sucesso!');
 });
+
+function TotalyClients() {
+    return parseInt(localStorage.getItem('totalClients') || '0', 10);
+}
+
+function salveClient(client) {
+    const index = TotalyClients();
+    
+    localStorage.setItem(`client_${index}_name`, client.name);
+    localStorage.setItem(`client_${index}_cpf`, client.cpf);
+    localStorage.setItem(`client_${index}_telefone`, client.telefone);
+    localStorage.setItem(`client_${index}_dateNasc`, client.dateNasc);
+    localStorage.setItem(`client_${index}_salary`, client.salary);
+    localStorage.setItem(`client_${index}_credit`, client.credit);
+
+    localStorage.setItem('totalClients', index + 1);
+}
 
 function clearStorage() {
     document.getElementById('clientName').value = '';
