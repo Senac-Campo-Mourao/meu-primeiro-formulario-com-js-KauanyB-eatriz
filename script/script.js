@@ -1,3 +1,20 @@
+document.addEventListener('DOMContentLoaded', function () {
+    listarClientes();
+    initSelect2();
+});
+
+function initSelect2() {
+    const cidades = [
+        'São Paulo/SP', 'Rio de Janeiro/RJ', 'Campo Mourão/PR', 'Maringá/PR', 'Londrina/PR', 'Peabiru/PR'];  
+
+        $('#clientCity').select2({
+            theme: 'bootstrap-5',
+            placeholder: 'Selecione a cidade',
+            allowClear: true,
+            data: cidades.map(city => ({ id: city, text: city}))
+        });
+    }
+
 function validateCPF(cpf) {
     if (!cpf) return false;
     const onlyDigits = cpf.replace(/\D+/g, '');
@@ -31,6 +48,18 @@ cpfInput.addEventListener('blur', function () {
     }
 });
 
+function existCPFCadastrado(cpf) {
+    const total = TotalyClients();  
+    for (let i = 0; i < total; i++) {
+        const cadsCpf = localStorage.getItem(`client_${i}_cpf`);
+
+        if (cadsCpf === cpf){
+            return true;
+        }
+    }
+    return false;
+}
+
 function CreditLimit(salary) {
     const salaryCents = salary.replace(/[^\d,]/g, '').replace(',', '.');
     let salaryConvertedReal = Math.round(parseFloat(salaryCents) * 100);
@@ -46,16 +75,26 @@ document.getElementById('formCadastro').addEventListener('submit', function (eve
     const telefone = document.getElementById('clientTelefone').value;
     const dateNasc = document.getElementById('clientDateNasc').value;
     const salary = document.getElementById('clientSalary').value;
+    const city = $('#clientCity').select2('data')[0]?.text || '';
     const credit = CreditLimit(salary);
-    
-    const client = { 
-        name, cpf, telefone, dateNasc, salary, credit
-    };
-    salveClient(client);
 
-    clearStorage();
-    alert('Cliente cadastrado com sucesso!');
+    const client = { 
+        name, cpf, telefone, dateNasc, city, salary, credit
+    };
+
+    if (existCPFCadastrado(cpf) == true) {
+        alert('CPF já cadastrado. Por favor, verifique e digite novamente.');
+        return;
+    } else{
+        salveClient(client);
+        clearStorage();
+        alert('Cliente cadastrado com sucesso!');
+    }
 });
+
+function mostrarCliente() {;
+    listarClientes();
+}
 
 function TotalyClients() {
     return parseInt(localStorage.getItem('totalClients') || '0', 10);
@@ -68,6 +107,7 @@ function salveClient(client) {
     localStorage.setItem(`client_${index}_cpf`, client.cpf);
     localStorage.setItem(`client_${index}_telefone`, client.telefone);
     localStorage.setItem(`client_${index}_dateNasc`, client.dateNasc);
+    localStorage.setItem(`client_${index}_city`, client.city);
     localStorage.setItem(`client_${index}_salary`, client.salary);
     localStorage.setItem(`client_${index}_credit`, client.credit);
 
@@ -94,6 +134,7 @@ function getClients() {
             cpf: localStorage.getItem(`client_${i}_cpf`),
             telefone: localStorage.getItem(`client_${i}_telefone`), 
             dateNasc: localStorage.getItem(`client_${i}_dateNasc`),
+            cidade: localStorage.getItem(`client_${i}_city`) || '',
             salary: localStorage.getItem(`client_${i}_salary`),
             credit: localStorage.getItem(`client_${i}_credit`),
         };
@@ -102,6 +143,15 @@ function getClients() {
     return clients;
 };
 
+function formatDate(dateString) {
+    if (!isNaN(dateString)) return '';
+    const parts = dateString.split('-');
+     if (parts.length === 3) {
+        const [year, month, day] = parts;
+        return `${day}/${month}/${year}`;
+    }
+}
+
 function listarClientes() {
     const clients = getClients();
     const tbody = document.getElementById('listaClients');
@@ -109,11 +159,13 @@ function listarClientes() {
     tbody.innerHTML = '';
     clients.forEach(cli => { 
         const tr = document.createElement('tr');
+        const date = formatDate(cli.dateNasc);
         tr.innerHTML = `
             <td>${cli.name}</td>
             <td>${cli.cpf}</td>
             <td>${cli.telefone}</td>
-            <td>${cli.dateNasc}</td>
+            <td>${date}</td>
+            <td>${cli.cidade}</td>
             <td>${cli.salary}</td>
             <td>${cli.credit}</td>
         `;
